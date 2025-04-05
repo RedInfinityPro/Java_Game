@@ -16,6 +16,7 @@ public class Main_Display_Panels {
     private static final String unique_id = "123";
     // call
     private Business_Name_Gen businessNameGen;
+    private Windows windows;
 
     public Main_Display_Panels(JFrame parent, Container container) {
         this.parentFrame = parent;
@@ -82,16 +83,23 @@ public class Main_Display_Panels {
             JButton storage_unit = createButton("Storage Unit");
             buttons_panel.add(storage_unit);
             storage_unit.addActionListener(e -> {
-                Storage_Unit_Window storage_unit_window = new Storage_Unit_Window();
-                JDialog storage_unit_window_show = new JDialog();
-                storage_unit_window_show.setLocationRelativeTo(null);
+                Windows windows_storage = new Windows(parentFrame, cp);
+                windows_storage.new Storage_Unit_Window();
             });
 
             JButton rocket_store = createButton("Rocket Store");
             buttons_panel.add(rocket_store);
+            rocket_store.addActionListener(e -> {
+                Windows windows_rocket = new Windows(parentFrame, cp);
+                windows_rocket.new Rocket_Store_Window();
+            });
 
             JButton planet_store = createButton("Planet Store");
             buttons_panel.add(planet_store);
+            planet_store.addActionListener(e -> {
+                Windows windows_planet = new Windows(parentFrame, cp);
+                windows_planet.new Rocket_Store_Window();
+            });
 
             add(business_panel, BorderLayout.WEST);
             add(details_panel, BorderLayout.EAST);
@@ -205,89 +213,6 @@ public class Main_Display_Panels {
             JButton button = new JButton(text);
             button.setFont(new Font("Arial", Font.PLAIN, 11));
             button.setBackground(Main.ACCENT_COLOR);
-            button.setForeground(Color.BLACK);
-            button.setFocusPainted(false);
-            button.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
-            return button;
-        }
-    }
-
-    // windows
-    public class Storage_Unit_Window extends JDialog {
-        public static final JFrame jFrame = new JFrame();
-
-        public Storage_Unit_Window() {
-            setTitle("Storage Unit");
-            setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
-            setBounds(200, 200, 600, 600);
-            // Items Panel
-            JPanel storage_unit_title_panel = new JPanel();
-            storage_unit_title_panel.setLayout(new BoxLayout(storage_unit_title_panel, BoxLayout.Y_AXIS));
-            storage_unit_title_panel.setBackground(Color.LIGHT_GRAY);
-            // Adding labels
-            storage_unit_title_panel.add(createLabel("Company's"));
-            storage_unit_title_panel.add(createScrollPane(60));
-            storage_unit_title_panel.add(createLabel("Company Upgrades"));
-            storage_unit_title_panel.add(createScrollPane(60));
-            storage_unit_title_panel.add(createLabel("Company Quality"));
-            storage_unit_title_panel.add(createScrollPane(60));
-            storage_unit_title_panel.add(createLabel("Rockets"));
-            storage_unit_title_panel.add(createScrollPane(60));
-            storage_unit_title_panel.add(createLabel("Rockets Upgrades"));
-            storage_unit_title_panel.add(createScrollPane(60));
-            storage_unit_title_panel.add(createLabel("Planets"));
-            storage_unit_title_panel.add(createScrollPane(60));
-            storage_unit_title_panel.add(createLabel("Managers"));
-            storage_unit_title_panel.add(createScrollPane(60));
-            add(storage_unit_title_panel, BorderLayout.CENTER);
-
-            // Close button
-            JButton closeButton = new JButton("Close");
-            closeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(false);
-                }
-            });
-
-            add(closeButton, BorderLayout.SOUTH);
-            setVisible(true);
-        }
-
-        private JLabel createLabel(String text) {
-            JLabel label = new JLabel(text);
-            label.setForeground(Color.BLACK);
-            label.setFont(new Font("Arial", Font.PLAIN, 14));
-            label.setHorizontalAlignment(JLabel.CENTER);
-            return label;
-        }
-
-        private JScrollPane createScrollPane(int button_amount) {
-            JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(Color.LIGHT_GRAY);
-            buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-
-            // Add buttons to the horizontal panel
-            for (int i = 0; i < button_amount; i++) {
-                JButton testButton = createButton("Test " + (i+1));
-                buttonPanel.add(testButton);
-            }
-
-            // Add button panel to a horizontal scroll pane
-            JScrollPane horizontalScrollPane = new JScrollPane(buttonPanel);
-            horizontalScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-            horizontalScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-            // Add the horizontal scroll pane to the bottom of the dialog
-            add(horizontalScrollPane, BorderLayout.NORTH);
-            return horizontalScrollPane;
-        }
-
-        private JButton createButton(String text) {
-            JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
-            button.setBackground(Color.LIGHT_GRAY);
             button.setForeground(Color.BLACK);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
