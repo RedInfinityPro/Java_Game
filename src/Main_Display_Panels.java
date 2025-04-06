@@ -2,10 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class Main_Display_Panels {
     private JFrame parentFrame;
     private Container cp;
+    private Random rand = new Random();
+    private int rand_int = rand.nextInt(1000 - 1 + 1) + 1;
 
     public static final Color PANEL_BG = Color.gray;
     public static final Color TEXT_COLOR = Color.black;
@@ -17,6 +20,7 @@ public class Main_Display_Panels {
     // call
     private Business_Name_Gen businessNameGen;
     private Windows windows;
+    private Main_Display_Items mainDisplayItems;
 
     public Main_Display_Panels(JFrame parent, Container container) {
         this.parentFrame = parent;
@@ -34,6 +38,29 @@ public class Main_Display_Panels {
         JPanel top_panel = new Top_Panel();
         main_panel.add(top_panel, BorderLayout.NORTH);
 
+        // center
+        JPanel _panel = new JPanel(new BorderLayout());
+        _panel.setBackground(new Color(0,0,0,10));
+        cp.add(main_panel, BorderLayout.CENTER);
+        // JPanel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBackground(DARK_BG);
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
+
+        // Add Corporation to Center
+        for (int i=0; i<rand_int; i++) {
+            Main_Display_Items mainDisplayItems = new Main_Display_Items(parentFrame, cp);
+            buttonPanel.add(mainDisplayItems.new Corporation());
+        }
+
+        JScrollPane scrollPane = new JScrollPane(buttonPanel);
+        scrollPane.setPreferredSize(new Dimension(1280, 450));
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBorder(BorderFactory.createLineBorder(DARK_BG));
+
+        _panel.add(scrollPane, BorderLayout.NORTH);
+        main_panel.add(_panel, BorderLayout.CENTER);
         // Add search panel SOUTH
         JPanel search_panel = new Search_Panel();
         main_panel.add(search_panel, BorderLayout.SOUTH);
@@ -147,6 +174,10 @@ public class Main_Display_Panels {
             corporation_details_panel.add(createLabel("Mega Bucks: $0.00"));
 
             JButton convert_button = createButton("Convert Money");
+            convert_button.addActionListener(e -> {
+                Windows windows_convert = new Windows(parentFrame, cp);
+                windows_convert.new Convet_Money_Window();
+            });
             corporation_details_panel.add(convert_button);
 
             add(corporation_details_panel, BorderLayout.CENTER);
@@ -189,12 +220,24 @@ public class Main_Display_Panels {
 
             JButton upgrade_button = createButton("Upgrades");
             buttons_panel.add(upgrade_button);
+            upgrade_button.addActionListener(e -> {
+                Windows windows_upgrade = new Windows(parentFrame, cp);
+                windows_upgrade.new Company_Upgrade_Store_Window();
+            });
 
             JButton manager_button = createButton("Managers");
             buttons_panel.add(manager_button);
+            manager_button.addActionListener(e -> {
+                Windows windows_manager = new Windows(parentFrame, cp);
+                windows_manager.new Managers_Store_Window();
+            });
 
             JButton investors_button = createButton("Investors");
             buttons_panel.add(investors_button);
+            investors_button.addActionListener(e -> {
+                Windows windows_investors = new Windows(parentFrame, cp);
+                windows_investors.new Investors_Window();
+            });
 
             add(search_panel, BorderLayout.CENTER);
             add(buttons_panel, BorderLayout.SOUTH);
