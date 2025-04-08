@@ -2,12 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
+import java.util.Random;
 
 public class Main_Display_Items {
     private JFrame parentFrame;
     private Container cp;
-
+    private final Random rand;
     public static final Color PANEL_BG = Color.gray;
     public static final Color TEXT_COLOR = Color.black;
     public static final Color DARK_BG = Color.darkGray;
@@ -17,6 +18,7 @@ public class Main_Display_Items {
     public Main_Display_Items(JFrame parent, Container container) {
         this.parentFrame = parent;
         this.cp = container;
+        this.rand = new Random();
         initialize_mainDisplay_Items();
     }
 
@@ -26,10 +28,23 @@ public class Main_Display_Items {
 
     public class Corporation extends JPanel {
         private JProgressBar progress;
-        private boolean progress_fill;
+        private JLabel moneyPerLabel, speedCostLabel, qualityCostLabel;
         private int progress_value = 0;
-        private int delay = 50;
+        // upgrades
+        private float delayInSeconds = rand.nextFloat(0, 99);
+        private float current_money = rand.nextFloat(0, 999);
+        private float speed_cost = rand.nextFloat(0, 999);
+        private float quality_cost = rand.nextFloat(0, 999);
+
+        private float quality_percent = rand.nextInt(100);
+        private float speed_percent = rand.nextInt(100);
+        private float delay_percent = rand.nextInt(100);
+        private float money_percent = rand.nextInt(100);
+
+        private static final DecimalFormat decimalFormat_time = new DecimalFormat("###.##");
+        private static final DecimalFormat decimalFormat_money = new DecimalFormat("0.00");
         private Timer fillTimer;
+
 
         public Corporation() {
             setLayout(new BorderLayout(10, 10));
@@ -66,7 +81,8 @@ public class Main_Display_Items {
             JLabel businessNameLabel = createLabel(business_name_gen.generateName());
             nameRow.add(businessNameLabel);
 
-            JLabel moneyPerLabel = createLabel(String.format("    | $0.00 / %s sec", delay));
+            int delayInMilliseconds = (int) (delayInSeconds * 1000);
+            moneyPerLabel = createLabel(String.format("    | $%s / %s sec", decimalFormat_money.format(current_money), decimalFormat_time.format(delayInSeconds)));
             nameRow.add(moneyPerLabel);
             topSection.add(nameRow);
             businessPanel.add(topSection, BorderLayout.NORTH);
@@ -90,9 +106,9 @@ public class Main_Display_Items {
             upgradePanel.setBackground(PANEL_BG);
             upgradePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-            JButton speedButton = createButton("Speed");
+            JButton speedButton = createButton("Upgrade");
             speedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            JLabel speedCostLabel = createLabel("$50.00");
+            speedCostLabel = createLabel(String.format("$%s", decimalFormat_money.format(speed_cost)));
             speedCostLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             upgradePanel.add(speedButton);
@@ -102,7 +118,7 @@ public class Main_Display_Items {
 
             JButton qualityButton = createButton("Quality");
             qualityButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            JLabel qualityCostLabel = createLabel("$75.00");
+            qualityCostLabel = createLabel(String.format("$%s", decimalFormat_money.format(quality_cost)));
             qualityCostLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             upgradePanel.add(qualityButton);
@@ -113,7 +129,7 @@ public class Main_Display_Items {
             add(businessPanel, BorderLayout.CENTER);
 
             // Initialize the fill timer but don't start it yet
-            fillTimer = new Timer(delay, new ActionListener() {
+            fillTimer = new Timer(delayInMilliseconds, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     progress_value++;
@@ -121,7 +137,6 @@ public class Main_Display_Items {
 
                     if (progress_value >= 100) {
                         fillTimer.stop();
-                        // Reset after a short delay so the user can see it's full
                         Timer resetTimer = new Timer(500, evt -> {
                             progress_value = 0;
                             progress.setValue(progress_value);
@@ -161,14 +176,32 @@ public class Main_Display_Items {
                     }
                 }
 
-                if (text.equals("Speed")) {
-                    // Only start the timer if it's not already running
-                    if (!fillTimer.isRunning()) {
-                        // Reset progress value before starting
-                        if (delay!=0) {
-                            delay-=1;
-                        }
+                if (text.equals("Upgrade")) {
+                    if (delayInSeconds > 0f) { // Avoid going too fast or hitting zero
+                        delayInSeconds *= (1 - delay_percent / 100.0f);
+                        speed_cost *= (1 + speed_percent / 100.0f);
+                        // Restart the timer with new delay
+                        fillTimer.setDelay((int) (delayInSeconds * 1000));
+                        // update labels
+                        moneyPerLabel.setText(String.format("    | $%s / %s sec",
+                                decimalFormat_money.format(current_money),
+                                decimalFormat_time.format(delayInSeconds)));
+
+                        speedCostLabel.setText(String.format("$%s", decimalFormat_money.format(speed_cost)));
+                        qualityCostLabel.setText(String.format("$%s", decimalFormat_money.format(quality_cost)));
                     }
+                }
+
+                if (text.equals("Quality")) {
+                    current_money *= (1 + money_percent / 100.0f);
+                    quality_cost *= (1 + quality_percent / 100.0f);
+                    // update labels
+                    moneyPerLabel.setText(String.format("    | $%s / %s sec",
+                            decimalFormat_money.format(current_money),
+                            decimalFormat_time.format(delayInSeconds)));
+
+                    speedCostLabel.setText(String.format("$%s", decimalFormat_money.format(speed_cost)));
+                    qualityCostLabel.setText(String.format("$%s", decimalFormat_money.format(quality_cost)));
                 }
             });
 
