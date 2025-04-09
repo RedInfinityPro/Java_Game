@@ -16,6 +16,7 @@ public class Main extends JFrame {
     public static final Color WHITE_COLOR = Color.WHITE;
     // call
     private Main_Display_Panels mainDisplayPanels;
+    private Main_Display_Items mainDisplayItems;
 
     public Main() {
         setTitle("Main");
@@ -28,7 +29,7 @@ public class Main extends JFrame {
         cp.setBackground(DARK_BG);
         ((JPanel)cp).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         // Create main panel with BorderLayout
-        Main_Display_Panels mainDisplayPanels = new Main_Display_Panels(this, cp);
+        Main_Display_Panels mainDisplayPanels = new Main_Display_Panels(this, cp, mainDisplayItems);
         // Visible
         setVisible(true);
     }

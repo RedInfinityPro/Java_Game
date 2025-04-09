@@ -2,25 +2,35 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Main_Display_Panels {
     private JFrame parentFrame;
     private Container cp;
+    public JLabel Money_Label, Gold_Label, MegaBucks_Label;
     private Random rand = new Random();
     private int rand_int = rand.nextInt(1000 - 1 + 1) + 1;
 
     private static final String play_time = "Time";
     private static final String planet_name = "Earth";
     private static final String unique_id = "123";
+
+    public static float money = 0f;
+    public static float gold = 0f;
+    public static float megaBucks = 0f;
+
+    private static final DecimalFormat decimalFormat_money = new DecimalFormat("0.00");
     // call
     private Business_Name_Gen businessNameGen;
     private Windows windows;
     private Main_Display_Items mainDisplayItems;
 
-    public Main_Display_Panels(JFrame parent, Container container) {
+    public Main_Display_Panels(JFrame parent, Container container, Main_Display_Items mainDisplayItems) {
         this.parentFrame = parent;
         this.cp = container;
+        this.rand = new Random();
+        this.mainDisplayItems = mainDisplayItems;
         initialize_mainDisplay();
     }
 
@@ -46,7 +56,7 @@ public class Main_Display_Panels {
 
         // Add Corporation to Center
         for (int i=0; i<rand_int; i++) {
-            Main_Display_Items mainDisplayItems = new Main_Display_Items(parentFrame, cp);
+            Main_Display_Items items = new Main_Display_Items(parentFrame, cp, this);
             buttonPanel.add(mainDisplayItems.new Corporation());
         }
 
@@ -165,9 +175,13 @@ public class Main_Display_Panels {
             JPanel corporation_details_panel = new JPanel(new GridLayout(0, 1));
             corporation_details_panel.setBackground(Main.PANEL_BG);
 
-            corporation_details_panel.add(createLabel("Money: $0.00"));
-            corporation_details_panel.add(createLabel("Gold: $0.00"));
-            corporation_details_panel.add(createLabel("Mega Bucks: $0.00"));
+            Money_Label = createLabel(String.format("Money: $%s", decimalFormat_money.format(money)));
+            Gold_Label = createLabel(String.format("Gold: $%s", decimalFormat_money.format(gold)));
+            MegaBucks_Label = createLabel(String.format("Mega Bucks: $%s", decimalFormat_money.format(megaBucks)));
+
+            corporation_details_panel.add(Money_Label);
+            corporation_details_panel.add(Gold_Label);
+            corporation_details_panel.add(MegaBucks_Label);
 
             JButton convert_button = createButton("Convert Money");
             convert_button.addActionListener(e -> {

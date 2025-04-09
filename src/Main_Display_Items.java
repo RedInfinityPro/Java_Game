@@ -12,11 +12,13 @@ public class Main_Display_Items {
     private final Random rand;
     // call
     private Business_Name_Gen businessNameGen;
+    private Main_Display_Panels mainDisplayPanels;
 
-    public Main_Display_Items(JFrame parent, Container container) {
+    public Main_Display_Items(JFrame parent, Container container, Main_Display_Panels displayPanels) {
         this.parentFrame = parent;
         this.cp = container;
         this.rand = new Random();
+        this.mainDisplayPanels = displayPanels; // store the reference
         initialize_mainDisplay_Items();
     }
 
@@ -29,7 +31,7 @@ public class Main_Display_Items {
         private JLabel moneyPerLabel, speedCostLabel, qualityCostLabel;
         private int progress_value = 0;
         // upgrades
-        private float delayInSeconds = rand.nextFloat(0, 99);
+        private float delayInSeconds = rand.nextFloat(0, 9);
         private float current_money = rand.nextFloat(0, 999);
         private float speed_cost = rand.nextFloat(0, 999);
         private float quality_cost = rand.nextFloat(0, 999);
@@ -42,7 +44,6 @@ public class Main_Display_Items {
         private static final DecimalFormat decimalFormat_time = new DecimalFormat("###.##");
         private static final DecimalFormat decimalFormat_money = new DecimalFormat("0.00");
         private Timer fillTimer;
-
 
         public Corporation() {
             setLayout(new BorderLayout(10, 10));
@@ -79,8 +80,10 @@ public class Main_Display_Items {
             JLabel businessNameLabel = createLabel(business_name_gen.generateName());
             nameRow.add(businessNameLabel);
 
-            int delayInMilliseconds = (int) (delayInSeconds * 1000);
-            moneyPerLabel = createLabel(String.format("    | $%s / %s sec", decimalFormat_money.format(current_money), decimalFormat_time.format(delayInSeconds)));
+            // Pre-format these strings once
+            String moneyStr = decimalFormat_money.format(current_money);
+            String timeStr = decimalFormat_time.format(delayInSeconds);
+            moneyPerLabel = createLabel(String.format("    | $%s / %s sec", moneyStr, timeStr));
             nameRow.add(moneyPerLabel);
             topSection.add(nameRow);
             businessPanel.add(topSection, BorderLayout.NORTH);
@@ -93,7 +96,7 @@ public class Main_Display_Items {
             progress = new JProgressBar(0, 100);
             progress.setBackground(Main.DARK_BG);
             progress.setForeground(Main.PROGRESS_COLOR);
-            progress.setValue(progress_value); // Example value
+            progress.setValue(progress_value);
             progress.setStringPainted(true);
             progress.setBorder(BorderFactory.createEmptyBorder());
             progress.setPreferredSize(new Dimension(0, 25));
@@ -108,7 +111,7 @@ public class Main_Display_Items {
 
             JButton speedButton = createButton("Upgrade");
             speedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            speedCostLabel = createLabel(String.format("$%s", decimalFormat_money.format(speed_cost)));
+            speedCostLabel = createLabel("$" + decimalFormat_money.format(speed_cost));
             speedCostLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             upgradePanel.add(speedButton);
@@ -118,7 +121,7 @@ public class Main_Display_Items {
 
             JButton qualityButton = createButton("Quality");
             qualityButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            qualityCostLabel = createLabel(String.format("$%s", decimalFormat_money.format(quality_cost)));
+            qualityCostLabel = createLabel("$" + decimalFormat_money.format(quality_cost));
             qualityCostLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             upgradePanel.add(qualityButton);
@@ -128,24 +131,34 @@ public class Main_Display_Items {
             businessPanel.add(upgradePanel, BorderLayout.EAST);
             add(businessPanel, BorderLayout.CENTER);
 
-            // Initialize the fill timer but don't start it yet
-            fillTimer = new Timer(delayInMilliseconds, new ActionListener() {
+            // Use an optimized ActionListener
+            ActionListener progressAction = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    progress_value++;
-                    progress.setValue(progress_value);
+                    // Update progress bar directly rather than via a variable
+                    progress.setValue(++progress_value);
 
                     if (progress_value >= 100) {
                         fillTimer.stop();
+
+                        // Update money immediately
+                        mainDisplayPanels.money += current_money;
+                        mainDisplayPanels.Money_Label.setText("Money: $" + decimalFormat_money.format(mainDisplayPanels.money));
+
+                        // Reset after a brief delay
                         Timer resetTimer = new Timer(500, evt -> {
                             progress_value = 0;
-                            progress.setValue(progress_value);
+                            progress.setValue(0);
                         });
                         resetTimer.setRepeats(false);
                         resetTimer.start();
                     }
                 }
-            });
+            };
+
+            // Initialize the fill timer
+            int delayInMilliseconds = (int) (delayInSeconds * 1000);
+            fillTimer = new Timer(delayInMilliseconds, progressAction);
             fillTimer.setInitialDelay(0);
         }
 
@@ -168,44 +181,57 @@ public class Main_Display_Items {
                 if (text.equals("Buy")) {
                     // Only start the timer if it's not already running
                     if (!fillTimer.isRunning()) {
-                        // Reset progress value before starting
                         progress_value = 0;
-                        progress.setValue(progress_value);
-                        // Start the fill timer
+                        progress.setValue(0);
                         fillTimer.start();
                     }
                 }
+                else if (text.equals("Upgrade") && mainDisplayPanels.money >= speed_cost) {
+                    if (delayInSeconds > 0f) {
+                        // Update money and display immediately
+                        mainDisplayPanels.money -= speed_cost;
+                        mainDisplayPanels.Money_Label.setText("Money: $" + decimalFormat_money.format(mainDisplayPanels.money));
 
-                if (text.equals("Upgrade")) {
-                    if (delayInSeconds > 0f) { // Avoid going too fast or hitting zero
+                        // Apply upgrades
                         delayInSeconds *= (1 - delay_percent / 100.0f);
                         speed_cost *= (1 + speed_percent / 100.0f);
-                        // Restart the timer with new delay
-                        fillTimer.setDelay((int) (delayInSeconds * 1000));
-                        // update labels
-                        moneyPerLabel.setText(String.format("    | $%s / %s sec",
-                                decimalFormat_money.format(current_money),
-                                decimalFormat_time.format(delayInSeconds)));
 
-                        speedCostLabel.setText(String.format("$%s", decimalFormat_money.format(speed_cost)));
-                        qualityCostLabel.setText(String.format("$%s", decimalFormat_money.format(quality_cost)));
+                        // Update timer delay
+                        fillTimer.setDelay((int) (delayInSeconds * 1000));
+
+                        // Update labels with the new format values
+                        updateLabels();
                     }
                 }
+                else if (text.equals("Quality") && mainDisplayPanels.money >= quality_cost) {
+                    // Update money and display immediately
+                    mainDisplayPanels.money -= quality_cost;
+                    mainDisplayPanels.Money_Label.setText("Money: $" + decimalFormat_money.format(mainDisplayPanels.money));
 
-                if (text.equals("Quality")) {
+                    // Apply upgrades
                     current_money *= (1 + money_percent / 100.0f);
                     quality_cost *= (1 + quality_percent / 100.0f);
-                    // update labels
-                    moneyPerLabel.setText(String.format("    | $%s / %s sec",
-                            decimalFormat_money.format(current_money),
-                            decimalFormat_time.format(delayInSeconds)));
 
-                    speedCostLabel.setText(String.format("$%s", decimalFormat_money.format(speed_cost)));
-                    qualityCostLabel.setText(String.format("$%s", decimalFormat_money.format(quality_cost)));
+                    // Update labels with the new format values
+                    updateLabels();
                 }
             });
 
             return button;
+        }
+
+        // Centralized method for updating labels
+        private void updateLabels() {
+            // Pre-format strings for better performance
+            String moneyStr = decimalFormat_money.format(current_money);
+            String timeStr = decimalFormat_time.format(delayInSeconds);
+            String speedCostStr = decimalFormat_money.format(speed_cost);
+            String qualityCostStr = decimalFormat_money.format(quality_cost);
+
+            // Update all labels at once
+            moneyPerLabel.setText("    | $" + moneyStr + " / " + timeStr + " sec");
+            speedCostLabel.setText("$" + speedCostStr);
+            qualityCostLabel.setText("$" + qualityCostStr);
         }
     }
 }
