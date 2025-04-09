@@ -10,10 +10,6 @@ public class Main_Display_Panels {
     private Random rand = new Random();
     private int rand_int = rand.nextInt(1000 - 1 + 1) + 1;
 
-    public static final Color PANEL_BG = Color.gray;
-    public static final Color TEXT_COLOR = Color.black;
-    public static final Color DARK_BG = Color.darkGray;
-
     private static final String play_time = "Time";
     private static final String planet_name = "Earth";
     private static final String unique_id = "123";
@@ -31,7 +27,7 @@ public class Main_Display_Panels {
     public void initialize_mainDisplay() {
         // Create main panel with BorderLayout
         JPanel main_panel = new JPanel(new BorderLayout());
-        main_panel.setBackground(DARK_BG);
+        main_panel.setBackground(Main.DARK_BG);
         cp.add(main_panel, BorderLayout.CENTER);
 
         // Add top panel to NORTH
@@ -40,12 +36,12 @@ public class Main_Display_Panels {
 
         // center
         JPanel _panel = new JPanel(new BorderLayout());
-        _panel.setBackground(new Color(0,0,0,10));
+        _panel.setBackground(Main.TRANSPARENT_COLOR);
         cp.add(main_panel, BorderLayout.CENTER);
         // JPanel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(DARK_BG);
+        buttonPanel.setBackground(Main.DARK_BG);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
 
         // Add Corporation to Center
@@ -55,9 +51,9 @@ public class Main_Display_Panels {
         }
 
         JScrollPane scrollPane = new JScrollPane(buttonPanel);
-        scrollPane.setPreferredSize(new Dimension(1280, 450));
+        scrollPane.setPreferredSize(new Dimension(1280, 460));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        scrollPane.setBorder(BorderFactory.createLineBorder(DARK_BG));
+        scrollPane.setBorder(BorderFactory.createLineBorder(Main.DARK_BG));
 
         _panel.add(scrollPane, BorderLayout.NORTH);
         main_panel.add(_panel, BorderLayout.CENTER);
@@ -67,7 +63,7 @@ public class Main_Display_Panels {
 
         // Create a left panel for corporation details
         JPanel left_panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 10));
-        left_panel.setBackground(DARK_BG);
+        left_panel.setBackground(Main.DARK_BG);
 
         // Add corporation details panel to left panel
         Corporation_Details_Panel corporation_details_panel = new Corporation_Details_Panel();
@@ -80,11 +76,11 @@ public class Main_Display_Panels {
     public class Top_Panel extends JPanel {
         public Top_Panel() {
             setLayout(new BorderLayout());
-            setBackground(PANEL_BG);
-            setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+            setBackground(Main.PANEL_BG);
+            setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
 
             JPanel business_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            business_panel.setBackground(Main_Display_Panels.PANEL_BG);
+            business_panel.setBackground(Main.PANEL_BG);
 
             business_panel.add(createLabel("Business Name:"));
             JTextField business_name_area = createTextField(20);
@@ -98,14 +94,14 @@ public class Main_Display_Panels {
             });
 
             JPanel details_panel = new JPanel(new GridLayout(0, 1));
-            details_panel.setBackground(Main_Display_Panels.PANEL_BG);
+            details_panel.setBackground(Main.PANEL_BG);
             details_panel.add(createLabel(String.format("Play Time: %s", play_time)));
             details_panel.add(createLabel(String.format("Planet Name: %s", planet_name)));
             details_panel.add(createLabel(String.format("Unique ID: %s", unique_id)));
 
             // buttons_panel
             JPanel buttons_panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            buttons_panel.setBackground(Main_Display_Panels.PANEL_BG);
+            buttons_panel.setBackground(Main.PANEL_BG);
 
             JButton storage_unit = createButton("Storage Unit");
             buttons_panel.add(storage_unit);
@@ -125,7 +121,7 @@ public class Main_Display_Panels {
             buttons_panel.add(planet_store);
             planet_store.addActionListener(e -> {
                 Windows windows_planet = new Windows(parentFrame, cp);
-                windows_planet.new Rocket_Store_Window();
+                windows_planet.new Planet_Store_Window();
             });
 
             add(business_panel, BorderLayout.WEST);
@@ -135,8 +131,8 @@ public class Main_Display_Panels {
 
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
-            label.setForeground(TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 12));
+            label.setForeground(Main.TEXT_COLOR);
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
             return label;
         }
 
@@ -163,11 +159,11 @@ public class Main_Display_Panels {
     public class Corporation_Details_Panel extends JPanel {
         public Corporation_Details_Panel() {
             setLayout(new BorderLayout());
-            setBackground(PANEL_BG);
+            setBackground(Main.PANEL_BG);
             setPreferredSize(new Dimension(220, 120));
 
             JPanel corporation_details_panel = new JPanel(new GridLayout(0, 1));
-            corporation_details_panel.setBackground(Main_Display_Panels.PANEL_BG);
+            corporation_details_panel.setBackground(Main.PANEL_BG);
 
             corporation_details_panel.add(createLabel("Money: $0.00"));
             corporation_details_panel.add(createLabel("Gold: $0.00"));
@@ -185,8 +181,8 @@ public class Main_Display_Panels {
 
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
-            label.setForeground(TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 12));
+            label.setForeground(Main.TEXT_COLOR);
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
             label.setHorizontalAlignment(JLabel.CENTER);
             return label;
         }
@@ -205,18 +201,18 @@ public class Main_Display_Panels {
     public class Search_Panel extends JPanel {
         public Search_Panel() {
             setLayout(new BorderLayout());
-            setBackground(PANEL_BG);
-            setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+            setBackground(Main.PANEL_BG);
+            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             // search_panel
             JPanel search_panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            search_panel.setBackground(Main_Display_Panels.PANEL_BG);
+            search_panel.setBackground(Main.PANEL_BG);
 
             JTextField search_area = createTextField(20);
             search_panel.add(search_area);
 
             // buttons_panel
             JPanel buttons_panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            buttons_panel.setBackground(Main_Display_Panels.PANEL_BG);
+            buttons_panel.setBackground(Main.PANEL_BG);
 
             JButton upgrade_button = createButton("Upgrades");
             buttons_panel.add(upgrade_button);

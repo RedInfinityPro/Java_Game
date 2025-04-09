@@ -4,14 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Random;
+import java.awt.Color;
 
 public class Main_Display_Items {
     private JFrame parentFrame;
     private Container cp;
     private final Random rand;
-    public static final Color PANEL_BG = Color.gray;
-    public static final Color TEXT_COLOR = Color.black;
-    public static final Color DARK_BG = Color.darkGray;
     // call
     private Business_Name_Gen businessNameGen;
 
@@ -48,30 +46,30 @@ public class Main_Display_Items {
 
         public Corporation() {
             setLayout(new BorderLayout(10, 10));
-            setBackground(PANEL_BG);
+            setBackground(Main.ACCENT_COLOR);
             setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
+                    BorderFactory.createLineBorder(Main.DARK_BG, 2),
                     BorderFactory.createEmptyBorder(15, 15, 15, 15)
             ));
 
             // Business panel with card-like appearance
             JPanel businessPanel = new JPanel();
             businessPanel.setLayout(new BorderLayout(10, 10));
-            businessPanel.setBackground(PANEL_BG);
+            businessPanel.setBackground(Main.PANEL_BG);
             businessPanel.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(220, 220, 225), 1),
+                    BorderFactory.createLineBorder(Main.ACCENT_COLOR, 1),
                     BorderFactory.createEmptyBorder(12, 12, 12, 12)
             ));
 
             // === Top section with business info ===
             JPanel topSection = new JPanel();
             topSection.setLayout(new BoxLayout(topSection, BoxLayout.Y_AXIS));
-            topSection.setBackground(PANEL_BG);
+            topSection.setBackground(Main.PANEL_BG);
             topSection.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
             // Business name row
             JPanel nameRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-            nameRow.setBackground(PANEL_BG);
+            nameRow.setBackground(Main.PANEL_BG);
 
             JButton buyButton = createButton("Buy");
             buyButton.setMargin(new Insets(5, 15, 5, 15));
@@ -89,10 +87,12 @@ public class Main_Display_Items {
 
             // === Center with progress bar ===
             JPanel progressPanel = new JPanel(new BorderLayout(0, 5));
-            progressPanel.setBackground(PANEL_BG);
+            progressPanel.setBackground(Main.PANEL_BG);
             progressPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 
             progress = new JProgressBar(0, 100);
+            progress.setBackground(Main.DARK_BG);
+            progress.setForeground(Main.PROGRESS_COLOR);
             progress.setValue(progress_value); // Example value
             progress.setStringPainted(true);
             progress.setBorder(BorderFactory.createEmptyBorder());
@@ -103,7 +103,7 @@ public class Main_Display_Items {
             // === Right side with upgrade buttons ===
             JPanel upgradePanel = new JPanel();
             upgradePanel.setLayout(new BoxLayout(upgradePanel, BoxLayout.Y_AXIS));
-            upgradePanel.setBackground(PANEL_BG);
+            upgradePanel.setBackground(Main.PANEL_BG);
             upgradePanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
             JButton speedButton = createButton("Upgrade");
@@ -151,8 +151,8 @@ public class Main_Display_Items {
 
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
-            label.setForeground(TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 12));
+            label.setForeground(Main.TEXT_COLOR);
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
             return label;
         }
 

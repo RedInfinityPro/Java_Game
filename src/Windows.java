@@ -6,11 +6,6 @@ import java.awt.Graphics;
 public class Windows {
     private JFrame parentFrame;
     private Container cp;
-    private Graphics g;
-
-    public static final Color PANEL_BG = Color.gray;
-    public static final Color TEXT_COLOR = Color.black;
-    public static final Color DARK_BG = Color.darkGray;
 
     public Windows(JFrame parent, Container container) {
         this.parentFrame = parent;
@@ -29,12 +24,12 @@ public class Windows {
         public Storage_Unit_Window() {
             setTitle("Storage Unit");
             setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
+            setBackground(Main.DARK_BG);
             setBounds(200, 100, 700, 700);
             // Items Panel
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(new Color(245, 245, 245));
+            contentPanel.setBackground(Main.DARK_BG);
             contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             // Adding labels
             // Section titles and scroll panes
@@ -52,15 +47,15 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 14));
-            closeButton.setBackground(Color.DARK_GRAY);
-            closeButton.setForeground(Color.GRAY);
+            closeButton.setFont(new Font("Arial", Font.BOLD, 11));
+            closeButton.setBackground(Main.DARK_BG);
+            closeButton.setForeground(Main.TEXT_COLOR);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
 
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(245, 245, 245));
+            buttonPanel.setBackground(Main.WHITE_COLOR);
             buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             buttonPanel.add(closeButton);
             add(buttonPanel, BorderLayout.SOUTH);
@@ -71,12 +66,15 @@ public class Windows {
         private JPanel createSection(String title, int buttonCount) {
             JPanel sectionPanel = new JPanel();
             sectionPanel.setLayout(new BorderLayout());
-            sectionPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
-            sectionPanel.setBackground(new Color(245, 245, 245));
+            sectionPanel.setBackground(Main.ACCENT_COLOR);
+            sectionPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.DARK_BG, 2),
+                    BorderFactory.createEmptyBorder(12, 12, 12, 12)
+            ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.BOLD, 16));
-            label.setForeground(new Color(33, 37, 41));
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
             JScrollPane scrollPane = createScrollPane(buttonCount, title);
@@ -88,34 +86,78 @@ public class Windows {
         private JScrollPane createScrollPane(int buttonCount, String title) {
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-            buttonPanel.setBackground(new Color(245, 245, 245));
-            buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+            buttonPanel.setBackground(Main.PANEL_BG);
+            buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.WHITE_COLOR, 1),
+                    BorderFactory.createEmptyBorder(5, 0, 5, 0)
+            ));
 
             String button_text = "";
             // Company's
             if (title.equals("Company's")) {
-                button_text = "<html><center>Name<br>Planet Associated With<br>Sell Cost<br>Value Per Second<br>Managers</center></html>";
+                button_text = "<html><center>Name" +
+                        "<br>Planet it operates on" +
+                        "<br>Sell Value" +
+                        "<br>Income / sec" +
+                        "<br>Manager assigned" +
+                        "<br>Upgrade Cost" +
+                        "<br>Quality Cost" +
+                        "</center></html>";
             }
             else if (title.equals("Company Upgrades")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Upgrade Name" +
+                        "<br>Sell Value" +
+                        "<br>Upkeep" +
+                        "<br>Effect" +
+                        "<br>Compatibility" +
+                        "</center></html>";
             }
             else if (title.equals("Company Quality")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Quality Name" +
+                        "<br>Sell Value" +
+                        "<br>Effect on earnings" +
+                        "<br>Current quality rating" +
+                        "<br>Compatibility" +
+                        "<br>Company it’s affecting" +
+                        "</center></html>";
             }
             // rockets
             if (title.equals("Rockets")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Fuel Per Second<br>Distance<br>Up Keep Cost</center></html>";
+                button_text = "<html><center>Rocket Name" +
+                        "<br>Sell Value" +
+                        "<br>Fuel/sec" +
+                        "<br>Remaining Range / Distance" +
+                        "<br>Payload capacity" +
+                        "<br>Upkeep" +
+                        "</center></html>";
             }
             else if (title.equals("Rockets Upgrades")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Upgrades Name" +
+                        "<br>Sell Value" +
+                        "<br>Upkeep" +
+                        "<br>Effect" +
+                        "<br>Compatibility" +
+                        "</center></html>";
             }
+
             // planets
             if (title.equals("Planets")) {
-                button_text = "<html><center>Name<br>Company Name<br>Sell Cost<br>Distance<br>Up Keep Cost<br>Company Available</center></html>";
+                button_text = "<html><center>Name" +
+                        "<br>Distance from HQ" +
+                        "<br>Number of Companies" +
+                        "<br>Fuel required to reach" +
+                        "<br>Sell Value" +
+                        "<br>Upkeep" +
+                        "</center></html>";
             }
             // managers
             if (title.equals("Managers")) {
-                button_text = "<html><center>Name<br>Planet Associated With<br>Company Associated With</center></html>";
+                button_text = "<html><center>Name" +
+                        "<br>Assigned Company" +
+                        "<br>Assigned Planet" +
+                        "<br>Skill Boost" +
+                        "<br>Salary" +
+                        "</center></html>";
             }
 
             for (int i = 0; i < buttonCount; i++) {
@@ -123,19 +165,19 @@ public class Windows {
             }
 
             JScrollPane scrollPane = new JScrollPane(buttonPanel);
-            scrollPane.setPreferredSize(new Dimension(600, 125));
+            scrollPane.setPreferredSize(new Dimension(600, 140));
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+            scrollPane.setBorder(BorderFactory.createLineBorder(Main.PANEL_BG));
 
             return scrollPane;
         }
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 12));
-            button.setBackground(new Color(220, 220, 220));
-            button.setForeground(new Color(51, 51, 51));
+            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setBackground(Main.PANEL_BG);
+            button.setForeground(Main.TEXT_COLOR);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -150,17 +192,37 @@ public class Windows {
         public Rocket_Store_Window() {
             setTitle("Rocket Store");
             setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
+            setBackground(Main.DARK_BG);
             setBounds(200, 100, 700, 700);
             // Items Panel
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(new Color(245, 245, 245));
+            contentPanel.setBackground(Main.DARK_BG);
             contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             // Adding labels
             // Section titles and scroll panes
+            JPanel buyTitle_Panel = new JPanel();
+            buyTitle_Panel.setLayout(new BoxLayout(buyTitle_Panel, BoxLayout.Y_AXIS));
+            buyTitle_Panel.setBackground(Main.DARK_BG);
+            buyTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel buy_text = new JLabel("Buy Items");
+            buy_text.setForeground(Main.WHITE_COLOR);
+            buy_text.setFont(new Font("Arial", Font.BOLD, 15));
+            buyTitle_Panel.add(buy_text);
+            contentPanel.add(buyTitle_Panel, BorderLayout.CENTER);
+
             contentPanel.add(createSection("Rockets Available", 20));
             contentPanel.add(createSection("Rockets Upgrades", 20));
+
+            JPanel sellTitle_Panel = new JPanel();
+            sellTitle_Panel.setLayout(new BoxLayout(sellTitle_Panel, BoxLayout.Y_AXIS));
+            sellTitle_Panel.setBackground(Main.DARK_BG);
+            sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel sell_text = new JLabel("Sell Items");
+            sell_text.setForeground(Main.WHITE_COLOR);
+            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sellTitle_Panel.add(sell_text);
+            contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
 
             contentPanel.add(createSection("Rockets Available To Sell", 20));
             contentPanel.add(createSection("Rockets Upgrades To Sell", 20));
@@ -171,15 +233,15 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 14));
-            closeButton.setBackground(Color.DARK_GRAY);
-            closeButton.setForeground(Color.GRAY);
+            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setBackground(Main.DARK_BG);
+            closeButton.setForeground(Main.TEXT_COLOR);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
 
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(245, 245, 245));
+            buttonPanel.setBackground(Main.WHITE_COLOR);
             buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             buttonPanel.add(closeButton);
             add(buttonPanel, BorderLayout.SOUTH);
@@ -190,12 +252,15 @@ public class Windows {
         private JPanel createSection(String title, int buttonCount) {
             JPanel sectionPanel = new JPanel();
             sectionPanel.setLayout(new BorderLayout());
-            sectionPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-            sectionPanel.setBackground(new Color(245, 245, 245));
+            sectionPanel.setBackground(Main.ACCENT_COLOR);
+            sectionPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.DARK_BG, 2),
+                    BorderFactory.createEmptyBorder(12, 12, 12, 12)
+            ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.BOLD, 16));
-            label.setForeground(new Color(33, 37, 41));
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
             JScrollPane scrollPane = createScrollPane(buttonCount, title);
@@ -207,23 +272,48 @@ public class Windows {
         private JScrollPane createScrollPane(int buttonCount, String title) {
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-            buttonPanel.setBackground(new Color(245, 245, 245));
-            buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+            buttonPanel.setBackground(Main.PANEL_BG);
+            buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.WHITE_COLOR, 1),
+                    BorderFactory.createEmptyBorder(5, 0, 5, 0)
+            ));
 
             String button_text = "";
             // rockets
             if (title.equals("Rockets Available")) {
-                button_text = "<html><center>Name<br>Cost To Buy<br>Fuel Per Second<br>Distance<br>Up Keep Cost</center></html>";
+                button_text = "<html><center>Rocket Name" +
+                        "<br>Cost To Buy" +
+                        "<br>Fuel/sec" +
+                        "<br>Remaining Range / Distance" +
+                        "<br>Payload capacity" +
+                        "<br>Upkeep" +
+                        "</center></html>";
             }
             else if (title.equals("Rockets Upgrades")) {
-                button_text = "<html><center>Name<br>Cost To Buy<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Upgrades Name" +
+                        "<br>Cost To Buy" +
+                        "<br>Upkeep" +
+                        "<br>Effect" +
+                        "<br>Compatibility" +
+                        "</center></html>";
             }
             // rockets to sell
             if (title.equals("Rockets Available To Sell")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Fuel Per Second<br>Distance<br>Up Keep Cost</center></html>";
+                button_text = "<html><center>Rocket Name" +
+                        "<br>Sell Value" +
+                        "<br>Fuel/sec" +
+                        "<br>Remaining Range / Distance" +
+                        "<br>Payload capacity" +
+                        "<br>Upkeep" +
+                        "</center></html>";
             }
             else if (title.equals("Rockets Upgrades To Sell")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Upgrades Name" +
+                        "<br>Sell Value" +
+                        "<br>Upkeep" +
+                        "<br>Effect" +
+                        "<br>Compatibility" +
+                        "</center></html>";
             }
 
             for (int i = 0; i < buttonCount; i++) {
@@ -234,16 +324,16 @@ public class Windows {
             scrollPane.setPreferredSize(new Dimension(600, 125));
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+            scrollPane.setBorder(BorderFactory.createLineBorder(Main.PANEL_BG));
 
             return scrollPane;
         }
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 12));
-            button.setBackground(new Color(220, 220, 220));
-            button.setForeground(new Color(51, 51, 51));
+            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setBackground(Main.PANEL_BG);
+            button.setForeground(Main.TEXT_COLOR);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -258,16 +348,37 @@ public class Windows {
         public Planet_Store_Window() {
             setTitle("Planet Store");
             setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
-            setBounds(200, 100, 500, 500);
+            setBackground(Main.DARK_BG);
+            setBounds(200, 100, 700, 700);
             // Items Panel
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(new Color(245, 245, 245));
+            contentPanel.setBackground(Main.DARK_BG);
             contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             // Adding labels
             // Section titles and scroll panes
+            JPanel buyTitle_Panel = new JPanel();
+            buyTitle_Panel.setLayout(new BoxLayout(buyTitle_Panel, BoxLayout.Y_AXIS));
+            buyTitle_Panel.setBackground(Main.DARK_BG);
+            buyTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel buy_text = new JLabel("Buy Items");
+            buy_text.setForeground(Main.WHITE_COLOR);
+            buy_text.setFont(new Font("Arial", Font.BOLD, 15));
+            buyTitle_Panel.add(buy_text);
+            contentPanel.add(buyTitle_Panel, BorderLayout.CENTER);
+
             contentPanel.add(createSection("Planet Available", 20));
+
+            JPanel sellTitle_Panel = new JPanel();
+            sellTitle_Panel.setLayout(new BoxLayout(sellTitle_Panel, BoxLayout.Y_AXIS));
+            sellTitle_Panel.setBackground(Main.DARK_BG);
+            sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel sell_text = new JLabel("Sell Items");
+            sell_text.setForeground(Main.WHITE_COLOR);
+            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sellTitle_Panel.add(sell_text);
+            contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
+
             contentPanel.add(createSection("Planet Available To Sell", 20));
 
             JScrollPane mainScrollPane = new JScrollPane(contentPanel);
@@ -276,15 +387,15 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 14));
-            closeButton.setBackground(Color.DARK_GRAY);
-            closeButton.setForeground(Color.GRAY);
+            closeButton.setFont(new Font("Arial", Font.BOLD, 11));
+            closeButton.setBackground(Main.DARK_BG);
+            closeButton.setForeground(Main.TEXT_COLOR);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
 
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(245, 245, 245));
+            buttonPanel.setBackground(Main.WHITE_COLOR);
             buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             buttonPanel.add(closeButton);
             add(buttonPanel, BorderLayout.SOUTH);
@@ -295,12 +406,15 @@ public class Windows {
         private JPanel createSection(String title, int buttonCount) {
             JPanel sectionPanel = new JPanel();
             sectionPanel.setLayout(new BorderLayout());
-            sectionPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-            sectionPanel.setBackground(new Color(245, 245, 245));
+            sectionPanel.setBackground(Main.ACCENT_COLOR);
+            sectionPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.DARK_BG, 2),
+                    BorderFactory.createEmptyBorder(12, 12, 12, 12)
+            ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.BOLD, 16));
-            label.setForeground(new Color(33, 37, 41));
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
             JScrollPane scrollPane = createScrollPane(buttonCount, title);
@@ -312,17 +426,32 @@ public class Windows {
         private JScrollPane createScrollPane(int buttonCount, String title) {
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-            buttonPanel.setBackground(new Color(245, 245, 245));
-            buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+            buttonPanel.setBackground(Main.PANEL_BG);
+            buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.WHITE_COLOR, 1),
+                    BorderFactory.createEmptyBorder(5, 0, 5, 0)
+            ));
 
             String button_text = "";
             // Planets
             if (title.equals("Planet Available")) {
-                button_text = "<html><center>Name<br>Company Name<br>Cost To Buy<br>Distance<br>Up Keep Cost<br>Company Available</center></html>";
+                button_text = "<html><center>Name" +
+                        "<br>Distance from HQ" +
+                        "<br>Number of Companies" +
+                        "<br>Fuel required to reach" +
+                        "<br>Buy Value" +
+                        "<br>Upkeep" +
+                        "</center></html>";
             }
 
             else if (title.equals("Planet Available To Sell")) {
-                button_text = "<html><center>Name<br>Company Name<br>Sell Cost<br>Distance<br>Up Keep Cost<br>Company Available</center></html>";
+                button_text = "<html><center>Name" +
+                        "<br>Distance from HQ" +
+                        "<br>Number of Companies" +
+                        "<br>Fuel required to reach" +
+                        "<br>Sell Value" +
+                        "<br>Upkeep" +
+                        "</center></html>";
             }
 
             for (int i = 0; i < buttonCount; i++) {
@@ -330,19 +459,19 @@ public class Windows {
             }
 
             JScrollPane scrollPane = new JScrollPane(buttonPanel);
-            scrollPane.setPreferredSize(new Dimension(600, 125));
+            scrollPane.setPreferredSize(new Dimension(600, 140));
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+            scrollPane.setBorder(BorderFactory.createLineBorder(Main.PANEL_BG));
 
             return scrollPane;
         }
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 12));
-            button.setBackground(new Color(220, 220, 220));
-            button.setForeground(new Color(51, 51, 51));
+            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setBackground(Main.PANEL_BG);
+            button.setForeground(Main.TEXT_COLOR);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -357,27 +486,27 @@ public class Windows {
         public Convet_Money_Window() {
             setTitle("Convert Money");
             setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
-            setBounds(200, 100, 500, 400);
+            setBackground(Main.DARK_BG);
+            setBounds(200, 100, 500, 500);
             setResizable(false);
             // Items Panel
             // Header Panel
             JPanel headerPanel = new JPanel();
             headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            headerPanel.setBackground(Main.DARK_BG);
             headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
             // Adding labels
             headerPanel.add(createLabel("Currency Converter"));
             add(headerPanel, BorderLayout.NORTH);
-
             // Main Content Panel
             JPanel mainPanel = new JPanel();
             mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
             mainPanel.setLayout(new GridBagLayout());
+            mainPanel.setBackground(Main.ACCENT_COLOR);
 
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.insets = new Insets(8, 5, 8, 5);
-
             // From Section
             JLabel fromLabel = createLabel("From:");
             gbc.gridx = 0;
@@ -386,6 +515,7 @@ public class Windows {
             mainPanel.add(fromLabel, gbc);
 
             JTextField convertFromField = createTextField(15);
+            convertFromField.setBackground(Main.WHITE_COLOR);
             convertFromField.addKeyListener(new KeyAdapter() {
                 public void keyTyped(KeyEvent e) {
                     char c = e.getKeyChar();
@@ -426,7 +556,7 @@ public class Windows {
 
             JTextField convertToField = createTextField(15);
             convertToField.setEditable(false);
-            convertToField.setBackground(new Color(245, 245, 245));
+            convertToField.setBackground(Main.WHITE_COLOR);
             gbc.gridx = 0;
             gbc.gridy = 4;
             gbc.gridwidth = 1;
@@ -443,15 +573,15 @@ public class Windows {
             add(mainPanel, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 14));
-            closeButton.setBackground(Color.DARK_GRAY);
-            closeButton.setForeground(Color.GRAY);
+            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setBackground(Main.DARK_BG);
+            closeButton.setForeground(Main.TEXT_COLOR);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
 
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(245, 245, 245));
+            buttonPanel.setBackground(Main.WHITE_COLOR);
             buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             buttonPanel.add(closeButton);
             add(buttonPanel, BorderLayout.SOUTH);
@@ -461,8 +591,8 @@ public class Windows {
 
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
-            label.setForeground(TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 12));
+            label.setForeground(Main.TEXT_COLOR);
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
             label.setHorizontalAlignment(JLabel.CENTER);
             return label;
         }
@@ -478,7 +608,7 @@ public class Windows {
 
         private JComboBox<String> createComboBox(String[] items) {
             JComboBox<String> comboBox = new JComboBox<>(items);
-            comboBox.setBackground(Color.WHITE);
+            comboBox.setBackground(Main.TEXT_COLOR);
             return comboBox;
         }
     }
@@ -490,17 +620,37 @@ public class Windows {
         public Company_Upgrade_Store_Window() {
             setTitle("Company Upgrade Store");
             setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
+            setBackground(Main.DARK_BG);
             setBounds(200, 100, 700, 700);
             // Items Panel
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(new Color(245, 245, 245));
+            contentPanel.setBackground(Main.DARK_BG);
             contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             // Adding labels
             // Section titles and scroll panes
+            JPanel buyTitle_Panel = new JPanel();
+            buyTitle_Panel.setLayout(new BoxLayout(buyTitle_Panel, BoxLayout.Y_AXIS));
+            buyTitle_Panel.setBackground(Main.DARK_BG);
+            buyTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel buy_text = new JLabel("Buy Items");
+            buy_text.setForeground(Main.WHITE_COLOR);
+            buy_text.setFont(new Font("Arial", Font.BOLD, 15));
+            buyTitle_Panel.add(buy_text);
+            contentPanel.add(buyTitle_Panel, BorderLayout.CENTER);
+
             contentPanel.add(createSection("Company Upgrade Available", 20));
             contentPanel.add(createSection("Company Quality Available", 20));
+
+            JPanel sellTitle_Panel = new JPanel();
+            sellTitle_Panel.setLayout(new BoxLayout(sellTitle_Panel, BoxLayout.Y_AXIS));
+            sellTitle_Panel.setBackground(Main.DARK_BG);
+            sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel sell_text = new JLabel("Sell Items");
+            sell_text.setForeground(Main.WHITE_COLOR);
+            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sellTitle_Panel.add(sell_text);
+            contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
 
             contentPanel.add(createSection("Company Upgrade Available To Sell", 20));
             contentPanel.add(createSection("Company Quality Available To Sell", 20));
@@ -511,15 +661,15 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 14));
-            closeButton.setBackground(Color.DARK_GRAY);
-            closeButton.setForeground(Color.GRAY);
+            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setBackground(Main.DARK_BG);
+            closeButton.setForeground(Main.TEXT_COLOR);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
 
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(245, 245, 245));
+            buttonPanel.setBackground(Main.WHITE_COLOR);
             buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             buttonPanel.add(closeButton);
             add(buttonPanel, BorderLayout.SOUTH);
@@ -530,12 +680,15 @@ public class Windows {
         private JPanel createSection(String title, int buttonCount) {
             JPanel sectionPanel = new JPanel();
             sectionPanel.setLayout(new BorderLayout());
-            sectionPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-            sectionPanel.setBackground(new Color(245, 245, 245));
+            sectionPanel.setBackground(Main.ACCENT_COLOR);
+            sectionPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.DARK_BG, 2),
+                    BorderFactory.createEmptyBorder(12, 12, 12, 12)
+            ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.BOLD, 16));
-            label.setForeground(new Color(33, 37, 41));
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
             JScrollPane scrollPane = createScrollPane(buttonCount, title);
@@ -547,25 +700,50 @@ public class Windows {
         private JScrollPane createScrollPane(int buttonCount, String title) {
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-            buttonPanel.setBackground(new Color(245, 245, 245));
-            buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+            buttonPanel.setBackground(Main.PANEL_BG);
+            buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.WHITE_COLOR, 1),
+                    BorderFactory.createEmptyBorder(5, 0, 5, 0)
+            ));
 
             String button_text = "";
             // Company
             if (title.equals("Company Upgrade Available")) {
-                button_text = "<html><center>Name<br>Cost To Buy<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Upgrade Name" +
+                        "<br>Buy Value" +
+                        "<br>Upkeep" +
+                        "<br>Effect" +
+                        "<br>Compatibility" +
+                        "</center></html>";
             }
 
             else if (title.equals("Company Quality Available")) {
-                button_text = "<html><center>Name<br>Cost TO buy<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Quality Name" +
+                        "<br>Buy Value" +
+                        "<br>Effect on earnings" +
+                        "<br>Current quality rating" +
+                        "<br>Compatibility" +
+                        "<br>Company it’s affecting" +
+                        "</center></html>";
             }
 
             if (title.equals("Company Upgrade Available To Sell")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Upgrade Name" +
+                        "<br>Sell Value" +
+                        "<br>Upkeep" +
+                        "<br>Effect" +
+                        "<br>Compatibility" +
+                        "</center></html>";
             }
 
             else if (title.equals("Company Quality Available To Sell")) {
-                button_text = "<html><center>Name<br>Sell Cost<br>Up Keep Cost<br>Details<br>Compatible With</center></html>";
+                button_text = "<html><center>Quality Name" +
+                        "<br>Sell Value" +
+                        "<br>Effect on earnings" +
+                        "<br>Current quality rating" +
+                        "<br>Compatibility" +
+                        "<br>Company it’s affecting" +
+                        "</center></html>";
             }
 
             for (int i = 0; i < buttonCount; i++) {
@@ -576,16 +754,16 @@ public class Windows {
             scrollPane.setPreferredSize(new Dimension(600, 125));
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+            scrollPane.setBorder(BorderFactory.createLineBorder(Main.DARK_BG));
 
             return scrollPane;
         }
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 12));
-            button.setBackground(new Color(220, 220, 220));
-            button.setForeground(new Color(51, 51, 51));
+            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setBackground(Main.PANEL_BG);
+            button.setForeground(Main.TEXT_COLOR);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -600,16 +778,37 @@ public class Windows {
         public Managers_Store_Window() {
             setTitle("Managers");
             setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
-            setBounds(200, 100, 500, 500);
+            setBackground(Main.DARK_BG);
+            setBounds(200, 100, 700, 700);
             // Items Panel
             JPanel contentPanel = new JPanel();
             contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-            contentPanel.setBackground(new Color(245, 245, 245));
+            contentPanel.setBackground(Main.DARK_BG);
             contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             // Adding labels
             // Section titles and scroll panes
+            JPanel buyTitle_Panel = new JPanel();
+            buyTitle_Panel.setLayout(new BoxLayout(buyTitle_Panel, BoxLayout.Y_AXIS));
+            buyTitle_Panel.setBackground(Main.DARK_BG);
+            buyTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel buy_text = new JLabel("Available");
+            buy_text.setForeground(Main.WHITE_COLOR);
+            buy_text.setFont(new Font("Arial", Font.BOLD, 15));
+            buyTitle_Panel.add(buy_text);
+            contentPanel.add(buyTitle_Panel, BorderLayout.CENTER);
+
             contentPanel.add(createSection("Managers Available", 20));
+
+            JPanel sellTitle_Panel = new JPanel();
+            sellTitle_Panel.setLayout(new BoxLayout(sellTitle_Panel, BoxLayout.Y_AXIS));
+            sellTitle_Panel.setBackground(Main.DARK_BG);
+            sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+            JLabel sell_text = new JLabel("Fire");
+            sell_text.setForeground(Main.WHITE_COLOR);
+            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sellTitle_Panel.add(sell_text);
+            contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
+
             contentPanel.add(createSection("Managers To Fire", 20));
 
             JScrollPane mainScrollPane = new JScrollPane(contentPanel);
@@ -618,15 +817,15 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 14));
-            closeButton.setBackground(Color.DARK_GRAY);
-            closeButton.setForeground(Color.GRAY);
+            closeButton.setFont(new Font("Arial", Font.BOLD, 11));
+            closeButton.setBackground(Main.DARK_BG);
+            closeButton.setForeground(Main.TEXT_COLOR);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
 
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(245, 245, 245));
+            buttonPanel.setBackground(Main.WHITE_COLOR);
             buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             buttonPanel.add(closeButton);
             add(buttonPanel, BorderLayout.SOUTH);
@@ -637,12 +836,15 @@ public class Windows {
         private JPanel createSection(String title, int buttonCount) {
             JPanel sectionPanel = new JPanel();
             sectionPanel.setLayout(new BorderLayout());
-            sectionPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-            sectionPanel.setBackground(new Color(245, 245, 245));
+            sectionPanel.setBackground(Main.ACCENT_COLOR);
+            sectionPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.DARK_BG, 2),
+                    BorderFactory.createEmptyBorder(12, 12, 12, 12)
+            ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.BOLD, 16));
-            label.setForeground(new Color(33, 37, 41));
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
             JScrollPane scrollPane = createScrollPane(buttonCount, title);
@@ -654,17 +856,30 @@ public class Windows {
         private JScrollPane createScrollPane(int buttonCount, String title) {
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-            buttonPanel.setBackground(new Color(245, 245, 245));
-            buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+            buttonPanel.setBackground(Main.PANEL_BG);
+            buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Main.WHITE_COLOR, 1),
+                    BorderFactory.createEmptyBorder(5, 0, 5, 0)
+            ));
 
             String button_text = "";
             // Company
             if (title.equals("Managers Available")) {
-                button_text = "<html><center>Name<br>Planet Associated With<br>Company Associated With</center></html>";
+                button_text = "<html><center>Name" +
+                        "<br>Assigned Company" +
+                        "<br>Assigned Planet" +
+                        "<br>Skill Boost" +
+                        "<br>Salary" +
+                        "</center></html>";
             }
 
             else if (title.equals("Managers To Fire")) {
-                button_text = "<html><center>Name<br>Planet Associated With<br>Company Associated With</center></html>";
+                button_text = "<html><center>Name" +
+                        "<br>Assigned Company" +
+                        "<br>Assigned Planet" +
+                        "<br>Skill Boost" +
+                        "<br>Salary" +
+                        "</center></html>";
             }
 
             for (int i = 0; i < buttonCount; i++) {
@@ -672,19 +887,19 @@ public class Windows {
             }
 
             JScrollPane scrollPane = new JScrollPane(buttonPanel);
-            scrollPane.setPreferredSize(new Dimension(600, 125));
+            scrollPane.setPreferredSize(new Dimension(600, 140));
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+            scrollPane.setBorder(BorderFactory.createLineBorder(Main.PANEL_BG));
 
             return scrollPane;
         }
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 12));
-            button.setBackground(new Color(220, 220, 220));
-            button.setForeground(new Color(51, 51, 51));
+            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setBackground(Main.PANEL_BG);
+            button.setForeground(Main.TEXT_COLOR);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -700,12 +915,13 @@ public class Windows {
             setTitle("Investors");
             setLayout(new BorderLayout());
             setBackground(Color.DARK_GRAY);
-            setBounds(200, 100, 500, 400);
+            setBounds(200, 100, 500, 500);
             setResizable(false);
             // Items Panel
             // Header Panel
             JPanel headerPanel = new JPanel();
             headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            headerPanel.setBackground(Main.DARK_BG);
             headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
             // Adding labels
             headerPanel.add(createLabel("Investors"));
@@ -715,6 +931,7 @@ public class Windows {
             JPanel mainPanel = new JPanel();
             mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
             mainPanel.setLayout(new GridBagLayout());
+            mainPanel.setBackground(Main.ACCENT_COLOR);
 
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -728,8 +945,8 @@ public class Windows {
             mainPanel.add(profitLabel, gbc);
 
             JTextField investor_amount_Field = createTextField(15);
+            investor_amount_Field.setBackground(Main.WHITE_COLOR);
             investor_amount_Field.setEditable(false);
-            investor_amount_Field.setBackground(new Color(245, 245, 245));
             gbc.gridx = 0;
             gbc.gridy = 1;
             gbc.gridwidth = 1;
@@ -755,8 +972,8 @@ public class Windows {
             mainPanel.add(amountLabel, gbc);
 
             JTextField amount_Field = createTextField(15);
+            amount_Field.setBackground(Main.WHITE_COLOR);
             amount_Field.setEditable(false);
-            amount_Field.setBackground(new Color(245, 245, 245));
             gbc.gridx = 0;
             gbc.gridy = 4;
             gbc.gridwidth = 1;
@@ -767,23 +984,23 @@ public class Windows {
 
             // Restart
             JButton restartButton = new JButton("Restart Business");
-            restartButton.setFont(new Font("Arial", Font.BOLD, 14));
-            restartButton.setBackground(Color.DARK_GRAY);
-            restartButton.setForeground(Color.GRAY);
+            restartButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            restartButton.setBackground(Main.DARK_BG);
+            restartButton.setForeground(Main.TEXT_COLOR);
             restartButton.setFocusPainted(false);
             restartButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 14));
-            closeButton.setBackground(Color.DARK_GRAY);
-            closeButton.setForeground(Color.GRAY);
+            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setBackground(Main.DARK_BG);
+            closeButton.setForeground(Main.TEXT_COLOR);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
 
             JPanel buttonPanel = new JPanel();
-            buttonPanel.setBackground(new Color(245, 245, 245));
+            buttonPanel.setBackground(Main.WHITE_COLOR);
             buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
             buttonPanel.add(restartButton);
             buttonPanel.add(closeButton);
@@ -794,8 +1011,8 @@ public class Windows {
 
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
-            label.setForeground(TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 12));
+            label.setForeground(Main.TEXT_COLOR);
+            label.setFont(new Font("Arial", Font.PLAIN, 11));
             label.setHorizontalAlignment(JLabel.CENTER);
             return label;
         }
@@ -804,14 +1021,14 @@ public class Windows {
             JTextField field = new JTextField(columns);
             field.setFont(new Font("Arial", Font.PLAIN, 11));
             field.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(Main.ACCENT_COLOR, 1),
+                    BorderFactory.createLineBorder(Main.WHITE_COLOR, 1),
                     BorderFactory.createEmptyBorder(5, 10, 5, 10)));
             return field;
         }
 
         private JComboBox<String> createComboBox(String[] items) {
             JComboBox<String> comboBox = new JComboBox<>(items);
-            comboBox.setBackground(Color.WHITE);
+            comboBox.setBackground(Main.TEXT_COLOR);
             return comboBox;
         }
     }
