@@ -1,11 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.Graphics;
 
 public class Windows {
     private JFrame parentFrame;
     private Container cp;
+
+    public Business_Name_Generator businessNameGenerator;
+    public Planet_Name_Generator planetNameGenerator;
 
     public Windows(JFrame parent, Container container) {
         this.parentFrame = parent;
@@ -47,9 +49,9 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 11));
+            closeButton.setFont(Main.BASIC_FONT);
             closeButton.setBackground(Main.DARK_BG);
-            closeButton.setForeground(Main.TEXT_COLOR);
+            closeButton.setForeground(Main.BUTTON_TEXT);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
@@ -73,7 +75,7 @@ public class Windows {
             ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
@@ -175,9 +177,9 @@ public class Windows {
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.PANEL_BG);
-            button.setForeground(Main.TEXT_COLOR);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -207,7 +209,7 @@ public class Windows {
             buyTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             JLabel buy_text = new JLabel("Buy Items");
             buy_text.setForeground(Main.WHITE_COLOR);
-            buy_text.setFont(new Font("Arial", Font.BOLD, 15));
+            buy_text.setFont(Main.BOLD_FONT);
             buyTitle_Panel.add(buy_text);
             contentPanel.add(buyTitle_Panel, BorderLayout.CENTER);
 
@@ -220,7 +222,7 @@ public class Windows {
             sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             JLabel sell_text = new JLabel("Sell Items");
             sell_text.setForeground(Main.WHITE_COLOR);
-            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sell_text.setFont(Main.BOLD_FONT);
             sellTitle_Panel.add(sell_text);
             contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
 
@@ -233,9 +235,9 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setFont(Main.BASIC_FONT);
             closeButton.setBackground(Main.DARK_BG);
-            closeButton.setForeground(Main.TEXT_COLOR);
+            closeButton.setForeground(Main.BUTTON_TEXT);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
@@ -259,7 +261,7 @@ public class Windows {
             ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
@@ -281,7 +283,7 @@ public class Windows {
             String button_text = "";
             // rockets
             if (title.equals("Rockets Available")) {
-                button_text = "<html><center>Rocket Name" +
+                button_text = "<html><center>Rocket Name: %s" +
                         "<br>Cost To Buy" +
                         "<br>Fuel/sec" +
                         "<br>Remaining Range / Distance" +
@@ -290,7 +292,7 @@ public class Windows {
                         "</center></html>";
             }
             else if (title.equals("Rockets Upgrades")) {
-                button_text = "<html><center>Upgrades Name" +
+                button_text = "<html><center>Upgrades Name: %s" +
                         "<br>Cost To Buy" +
                         "<br>Upkeep" +
                         "<br>Effect" +
@@ -331,9 +333,9 @@ public class Windows {
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.PANEL_BG);
-            button.setForeground(Main.TEXT_COLOR);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -375,7 +377,7 @@ public class Windows {
             sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             JLabel sell_text = new JLabel("Sell Items");
             sell_text.setForeground(Main.WHITE_COLOR);
-            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sell_text.setFont(Main.BOLD_FONT);
             sellTitle_Panel.add(sell_text);
             contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
 
@@ -387,9 +389,9 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 11));
+            closeButton.setFont(Main.BASIC_FONT);
             closeButton.setBackground(Main.DARK_BG);
-            closeButton.setForeground(Main.TEXT_COLOR);
+            closeButton.setForeground(Main.BUTTON_TEXT);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
@@ -413,7 +415,7 @@ public class Windows {
             ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
@@ -469,9 +471,9 @@ public class Windows {
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.PANEL_BG);
-            button.setForeground(Main.TEXT_COLOR);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -573,9 +575,9 @@ public class Windows {
             add(mainPanel, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setFont(Main.BASIC_FONT);
             closeButton.setBackground(Main.DARK_BG);
-            closeButton.setForeground(Main.TEXT_COLOR);
+            closeButton.setForeground(Main.BUTTON_TEXT);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
@@ -592,14 +594,14 @@ public class Windows {
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
             label.setForeground(Main.TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setHorizontalAlignment(JLabel.CENTER);
             return label;
         }
 
         private JTextField createTextField(int columns) {
             JTextField field = new JTextField(columns);
-            field.setFont(new Font("Arial", Font.PLAIN, 11));
+            field.setFont(Main.BASIC_FONT);
             field.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(Main.ACCENT_COLOR, 1),
                     BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -635,7 +637,7 @@ public class Windows {
             buyTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             JLabel buy_text = new JLabel("Buy Items");
             buy_text.setForeground(Main.WHITE_COLOR);
-            buy_text.setFont(new Font("Arial", Font.BOLD, 15));
+            buy_text.setFont(Main.BOLD_FONT);
             buyTitle_Panel.add(buy_text);
             contentPanel.add(buyTitle_Panel, BorderLayout.CENTER);
 
@@ -648,7 +650,7 @@ public class Windows {
             sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             JLabel sell_text = new JLabel("Sell Items");
             sell_text.setForeground(Main.WHITE_COLOR);
-            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sell_text.setFont(Main.BOLD_FONT);
             sellTitle_Panel.add(sell_text);
             contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
 
@@ -661,9 +663,9 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setFont(Main.BASIC_FONT);
             closeButton.setBackground(Main.DARK_BG);
-            closeButton.setForeground(Main.TEXT_COLOR);
+            closeButton.setForeground(Main.BUTTON_TEXT);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
@@ -687,7 +689,7 @@ public class Windows {
             ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
@@ -761,9 +763,9 @@ public class Windows {
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.PANEL_BG);
-            button.setForeground(Main.TEXT_COLOR);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -793,7 +795,7 @@ public class Windows {
             buyTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             JLabel buy_text = new JLabel("Available");
             buy_text.setForeground(Main.WHITE_COLOR);
-            buy_text.setFont(new Font("Arial", Font.BOLD, 15));
+            buy_text.setFont(Main.BOLD_FONT);
             buyTitle_Panel.add(buy_text);
             contentPanel.add(buyTitle_Panel, BorderLayout.CENTER);
 
@@ -805,7 +807,7 @@ public class Windows {
             sellTitle_Panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
             JLabel sell_text = new JLabel("Fire");
             sell_text.setForeground(Main.WHITE_COLOR);
-            sell_text.setFont(new Font("Arial", Font.BOLD, 15));
+            sell_text.setFont(Main.BOLD_FONT);
             sellTitle_Panel.add(sell_text);
             contentPanel.add(sellTitle_Panel, BorderLayout.CENTER);
 
@@ -817,9 +819,9 @@ public class Windows {
             add(mainScrollPane, BorderLayout.CENTER);
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.BOLD, 11));
+            closeButton.setFont(Main.BASIC_FONT);
             closeButton.setBackground(Main.DARK_BG);
-            closeButton.setForeground(Main.TEXT_COLOR);
+            closeButton.setForeground(Main.BUTTON_TEXT);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
@@ -843,7 +845,7 @@ public class Windows {
             ));
 
             JLabel label = new JLabel(title);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setForeground(Main.TEXT_COLOR);
             sectionPanel.add(label, BorderLayout.NORTH);
 
@@ -897,9 +899,9 @@ public class Windows {
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.PANEL_BG);
-            button.setForeground(Main.TEXT_COLOR);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
             button.setMargin(new Insets(5, 10, 5, 10));
@@ -914,7 +916,7 @@ public class Windows {
         public Investors_Window() {
             setTitle("Investors");
             setLayout(new BorderLayout());
-            setBackground(Color.DARK_GRAY);
+            setBackground(Main.DARK_BG);
             setBounds(200, 100, 500, 500);
             setResizable(false);
             // Items Panel
@@ -984,17 +986,17 @@ public class Windows {
 
             // Restart
             JButton restartButton = new JButton("Restart Business");
-            restartButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            restartButton.setFont(Main.BASIC_FONT);
             restartButton.setBackground(Main.DARK_BG);
-            restartButton.setForeground(Main.TEXT_COLOR);
+            restartButton.setForeground(Main.BUTTON_TEXT);
             restartButton.setFocusPainted(false);
             restartButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
             // Close button
             JButton closeButton = new JButton("Close");
-            closeButton.setFont(new Font("Arial", Font.PLAIN, 11));
+            closeButton.setFont(Main.BASIC_FONT);
             closeButton.setBackground(Main.DARK_BG);
-            closeButton.setForeground(Main.TEXT_COLOR);
+            closeButton.setForeground(Main.BUTTON_TEXT);
             closeButton.setFocusPainted(false);
             closeButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             closeButton.addActionListener(e -> setVisible(false));
@@ -1012,14 +1014,14 @@ public class Windows {
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
             label.setForeground(Main.TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setHorizontalAlignment(JLabel.CENTER);
             return label;
         }
 
         private JTextField createTextField(int columns) {
             JTextField field = new JTextField(columns);
-            field.setFont(new Font("Arial", Font.PLAIN, 11));
+            field.setFont(Main.BASIC_FONT);
             field.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(Main.WHITE_COLOR, 1),
                     BorderFactory.createEmptyBorder(5, 10, 5, 10)));

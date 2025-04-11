@@ -1,36 +1,31 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 import java.util.Random;
+import java.util.UUID;
 
 public class Main_Display_Panels {
     private JFrame parentFrame;
     private Container cp;
+    public Random rand_panels = new Random();
+    // labels
     public JLabel Money_Label, Gold_Label, MegaBucks_Label;
-    private Random rand = new Random();
-    private int rand_int = rand.nextInt(1000 - 1 + 1) + 1;
-
-    private static final String play_time = "Time";
-    private static final String planet_name = "Earth";
-    private static final String unique_id = "123";
-
+    public int rand_int = rand_panels.nextInt(1000 - 1 + 1) + 1;
     public static float money = 0f;
     public static float gold = 0f;
     public static float megaBucks = 0f;
-
-    private static final DecimalFormat decimalFormat_money = new DecimalFormat("0.00");
     // call
-    private Business_Name_Gen businessNameGen;
-    private Windows windows;
-    private Main_Display_Items mainDisplayItems;
+    public Elements elements;
+    public Business_Name_Generator businessNameGenerator;
+    public Windows windows;
+    public Main_Display_Items mainDisplayItems;
 
     public Main_Display_Panels(JFrame parent, Container container, Main_Display_Items mainDisplayItems) {
         this.parentFrame = parent;
         this.cp = container;
-        this.rand = new Random();
-        this.mainDisplayItems = mainDisplayItems;
+        this.elements = new Elements();
+        this.businessNameGenerator = new Business_Name_Generator();
+        this.windows = new Windows(parent, cp);
+        this.mainDisplayItems = new Main_Display_Items(parent, cp, this);
         initialize_mainDisplay();
     }
 
@@ -45,8 +40,8 @@ public class Main_Display_Panels {
         main_panel.add(top_panel, BorderLayout.NORTH);
 
         // center
-        JPanel _panel = new JPanel(new BorderLayout());
-        _panel.setBackground(Main.TRANSPARENT_COLOR);
+        JPanel center_panel = new JPanel(new BorderLayout());
+        center_panel.setBackground(Main.TRANSPARENT_COLOR);
         cp.add(main_panel, BorderLayout.CENTER);
         // JPanel
         JPanel buttonPanel = new JPanel();
@@ -65,8 +60,8 @@ public class Main_Display_Panels {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setBorder(BorderFactory.createLineBorder(Main.DARK_BG));
 
-        _panel.add(scrollPane, BorderLayout.NORTH);
-        main_panel.add(_panel, BorderLayout.CENTER);
+        center_panel.add(scrollPane, BorderLayout.NORTH);
+        main_panel.add(center_panel, BorderLayout.CENTER);
         // Add search panel SOUTH
         JPanel search_panel = new Search_Panel();
         main_panel.add(search_panel, BorderLayout.SOUTH);
@@ -84,6 +79,11 @@ public class Main_Display_Panels {
     }
 
     public class Top_Panel extends JPanel {
+        private static final String play_time = "Time";
+        private static final String planet_name = "Earth";
+        private final RandomUserID generator = new RandomUserID();
+        private final String unique_id = generator.generateUserID();
+
         public Top_Panel() {
             setLayout(new BorderLayout());
             setBackground(Main.PANEL_BG);
@@ -99,8 +99,8 @@ public class Main_Display_Panels {
             JButton randomize_name_button = createButton("Randomize Name");
             business_panel.add(randomize_name_button);
             randomize_name_button.addActionListener(e -> {
-                Business_Name_Gen business_name_gen = new Business_Name_Gen();
-                business_name_area.setText(business_name_gen.generateName()); // Example action
+                Business_Name_Generator business_name_gen = new Business_Name_Generator();
+                business_name_area.setText(business_name_gen.generate()); // Example action
             });
 
             JPanel details_panel = new JPanel(new GridLayout(0, 1));
@@ -142,13 +142,13 @@ public class Main_Display_Panels {
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
             label.setForeground(Main.TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             return label;
         }
 
         private JTextField createTextField(int columns) {
             JTextField field = new JTextField(columns);
-            field.setFont(new Font("Arial", Font.PLAIN, 11));
+            field.setFont(Main.BASIC_FONT);
             field.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(Main.ACCENT_COLOR, 1),
                     BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -157,9 +157,9 @@ public class Main_Display_Panels {
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.ACCENT_COLOR);
-            button.setForeground(Color.BLACK);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
             return button;
@@ -175,9 +175,10 @@ public class Main_Display_Panels {
             JPanel corporation_details_panel = new JPanel(new GridLayout(0, 1));
             corporation_details_panel.setBackground(Main.PANEL_BG);
 
-            Money_Label = createLabel(String.format("Money: $%s", decimalFormat_money.format(money)));
-            Gold_Label = createLabel(String.format("Gold: $%s", decimalFormat_money.format(gold)));
-            MegaBucks_Label = createLabel(String.format("Mega Bucks: $%s", decimalFormat_money.format(megaBucks)));
+            Elements elements = new Elements();
+            Money_Label = createLabel(String.format("Money: $%s", elements.formatNumber(money)));
+            Gold_Label = createLabel(String.format("Gold: $%s", elements.formatNumber(gold)));
+            MegaBucks_Label = createLabel(String.format("Mega Bucks: $%s", elements.formatNumber(megaBucks)));
 
             corporation_details_panel.add(Money_Label);
             corporation_details_panel.add(Gold_Label);
@@ -196,16 +197,16 @@ public class Main_Display_Panels {
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
             label.setForeground(Main.TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             label.setHorizontalAlignment(JLabel.CENTER);
             return label;
         }
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.ACCENT_COLOR);
-            button.setForeground(Color.BLACK);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
             return button;
@@ -255,7 +256,7 @@ public class Main_Display_Panels {
 
         private JTextField createTextField(int columns) {
             JTextField field = new JTextField(columns);
-            field.setFont(new Font("Arial", Font.PLAIN, 11));
+            field.setFont(Main.BASIC_FONT);
             field.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(Main.ACCENT_COLOR, 1),
                     BorderFactory.createEmptyBorder(5, 10, 5, 10)));
@@ -264,12 +265,19 @@ public class Main_Display_Panels {
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.ACCENT_COLOR);
-            button.setForeground(Color.BLACK);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
             return button;
         }
+    }
+
+
+    public class RandomUserID {
+        public String generateUserID() {
+            return UUID.randomUUID().toString();
+            }
     }
 }

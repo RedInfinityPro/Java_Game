@@ -4,21 +4,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Random;
-import java.awt.Color;
 
 public class Main_Display_Items {
     private JFrame parentFrame;
     private Container cp;
-    private final Random rand;
+    public static Random rand_items = new Random();
     // call
-    private Business_Name_Gen businessNameGen;
-    private Main_Display_Panels mainDisplayPanels;
+    public Elements elements;
+    public Business_Name_Generator businessNameGenerator;
+    public Main_Display_Panels mainDisplayPanels;
 
-    public Main_Display_Items(JFrame parent, Container container, Main_Display_Panels displayPanels) {
+    public Main_Display_Items(JFrame parent, Container container, Main_Display_Panels mainDisplayPanels) {
         this.parentFrame = parent;
         this.cp = container;
-        this.rand = new Random();
-        this.mainDisplayPanels = displayPanels; // store the reference
+        this.elements = new Elements();
+        this.businessNameGenerator = new Business_Name_Generator();
+        this.mainDisplayPanels = mainDisplayPanels; // store the reference
         initialize_mainDisplay_Items();
     }
 
@@ -31,18 +32,18 @@ public class Main_Display_Items {
         private JLabel moneyPerLabel, speedCostLabel, qualityCostLabel;
         private int progress_value = 0;
         // upgrades
-        private float delayInSeconds = rand.nextFloat(0, 9);
-        private float current_money = rand.nextFloat(0, 999);
-        private float speed_cost = rand.nextFloat(0, 999);
-        private float quality_cost = rand.nextFloat(0, 999);
+        private double scalingFactor = 100;
+        private float delayInSeconds = rand_items.nextFloat(0, 9);
+        private double current_money = nextLogarithmicDouble(0.01, 999.99);
+        private double speed_cost = nextLogarithmicDouble(0.01, 999.99);
+        private double quality_cost = nextLogarithmicDouble(0.01, 999.99);
 
-        private float quality_percent = rand.nextInt(100);
-        private float speed_percent = rand.nextInt(100);
-        private float delay_percent = rand.nextInt(100);
-        private float money_percent = rand.nextInt(100);
+        private double quality_percent = rand_items.nextInt(100);
+        private double speed_percent = rand_items.nextInt(100);
+        private double delay_percent = rand_items.nextInt(100);
+        private double money_percent = rand_items.nextInt(100);
 
         private static final DecimalFormat decimalFormat_time = new DecimalFormat("###.##");
-        private static final DecimalFormat decimalFormat_money = new DecimalFormat("0.00");
         private Timer fillTimer;
 
         public Corporation() {
@@ -76,12 +77,13 @@ public class Main_Display_Items {
             buyButton.setMargin(new Insets(5, 15, 5, 15));
             nameRow.add(buyButton);
 
-            Business_Name_Gen business_name_gen = new Business_Name_Gen();
-            JLabel businessNameLabel = createLabel(business_name_gen.generateName());
+            Business_Name_Generator business_name_gen = new Business_Name_Generator();
+            JLabel businessNameLabel = createLabel(business_name_gen.generate());
             nameRow.add(businessNameLabel);
 
             // Pre-format these strings once
-            String moneyStr = decimalFormat_money.format(current_money);
+            Elements elements = new Elements();
+            String moneyStr = elements.formatNumber(current_money);
             String timeStr = decimalFormat_time.format(delayInSeconds);
             moneyPerLabel = createLabel(String.format("    | $%s / %s sec", moneyStr, timeStr));
             nameRow.add(moneyPerLabel);
@@ -111,7 +113,7 @@ public class Main_Display_Items {
 
             JButton speedButton = createButton("Upgrade");
             speedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            speedCostLabel = createLabel("$" + decimalFormat_money.format(speed_cost));
+            speedCostLabel = createLabel("$" + elements.formatNumber(speed_cost));
             speedCostLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             upgradePanel.add(speedButton);
@@ -121,7 +123,7 @@ public class Main_Display_Items {
 
             JButton qualityButton = createButton("Quality");
             qualityButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            qualityCostLabel = createLabel("$" + decimalFormat_money.format(quality_cost));
+            qualityCostLabel = createLabel("$" + elements.formatNumber(quality_cost));
             qualityCostLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             upgradePanel.add(qualityButton);
@@ -143,7 +145,7 @@ public class Main_Display_Items {
 
                         // Update money immediately
                         mainDisplayPanels.money += current_money;
-                        mainDisplayPanels.Money_Label.setText("Money: $" + decimalFormat_money.format(mainDisplayPanels.money));
+                        mainDisplayPanels.Money_Label.setText("Money: $" + elements.formatNumber(mainDisplayPanels.money));
 
                         // Reset after a brief delay
                         Timer resetTimer = new Timer(500, evt -> {
@@ -165,15 +167,15 @@ public class Main_Display_Items {
         private JLabel createLabel(String text) {
             JLabel label = new JLabel(text);
             label.setForeground(Main.TEXT_COLOR);
-            label.setFont(new Font("Arial", Font.PLAIN, 11));
+            label.setFont(Main.BASIC_FONT);
             return label;
         }
 
         private JButton createButton(String text) {
             JButton button = new JButton(text);
-            button.setFont(new Font("Arial", Font.PLAIN, 11));
+            button.setFont(Main.BASIC_FONT);
             button.setBackground(Main.ACCENT_COLOR);
-            button.setForeground(Color.BLACK);
+            button.setForeground(Main.BUTTON_TEXT);
             button.setFocusPainted(false);
             button.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
 
@@ -190,7 +192,7 @@ public class Main_Display_Items {
                     if (delayInSeconds > 0f) {
                         // Update money and display immediately
                         mainDisplayPanels.money -= speed_cost;
-                        mainDisplayPanels.Money_Label.setText("Money: $" + decimalFormat_money.format(mainDisplayPanels.money));
+                        mainDisplayPanels.Money_Label.setText("Money: $" + elements.formatNumber(mainDisplayPanels.money));
 
                         // Apply upgrades
                         delayInSeconds *= (1 - delay_percent / 100.0f);
@@ -206,7 +208,7 @@ public class Main_Display_Items {
                 else if (text.equals("Quality") && mainDisplayPanels.money >= quality_cost) {
                     // Update money and display immediately
                     mainDisplayPanels.money -= quality_cost;
-                    mainDisplayPanels.Money_Label.setText("Money: $" + decimalFormat_money.format(mainDisplayPanels.money));
+                    mainDisplayPanels.Money_Label.setText("Money: $" + elements.formatNumber(mainDisplayPanels.money));
 
                     // Apply upgrades
                     current_money *= (1 + money_percent / 100.0f);
@@ -222,16 +224,29 @@ public class Main_Display_Items {
 
         // Centralized method for updating labels
         private void updateLabels() {
+            Elements elements = new Elements();
             // Pre-format strings for better performance
-            String moneyStr = decimalFormat_money.format(current_money);
+            String moneyStr = elements.formatNumber(current_money);
             String timeStr = decimalFormat_time.format(delayInSeconds);
-            String speedCostStr = decimalFormat_money.format(speed_cost);
-            String qualityCostStr = decimalFormat_money.format(quality_cost);
+            String speedCostStr = elements.formatNumber(speed_cost);
+            String qualityCostStr = elements.formatNumber(quality_cost);
 
             // Update all labels at once
             moneyPerLabel.setText("    | $" + moneyStr + " / " + timeStr + " sec");
             speedCostLabel.setText("$" + speedCostStr);
             qualityCostLabel.setText("$" + qualityCostStr);
         }
+    }
+
+    public double nextLogarithmicDouble(Double minValue, Double maxValue) {
+        // Convert range to log scale
+        double logMin = Math.log(minValue);
+        double logMax = Math.log(maxValue);
+
+        // Generate a random value in the log scale
+        double logValue = logMin + (rand_items.nextDouble() * (logMax - logMin));
+
+        // Convert back from log scale to original scale
+        return Math.exp(logValue);
     }
 }
